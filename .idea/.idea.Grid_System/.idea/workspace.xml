@@ -15,6 +15,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/EnemyCubes.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/MapEditor.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
@@ -24,6 +25,7 @@
         <option value="$PROJECT_DIR$/Assets/Editor/Fisher_Yates.cs" />
         <option value="$PROJECT_DIR$/Assets/CubePlacer.cs" />
         <option value="$PROJECT_DIR$/Assets/Editor/MapEditor.cs" />
+        <option value="$PROJECT_DIR$/Assets/EnemyCubes.cs" />
         <option value="$PROJECT_DIR$/Assets/MapGenerator.cs" />
       </list>
     </option>
