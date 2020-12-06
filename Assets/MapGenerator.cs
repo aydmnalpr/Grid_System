@@ -8,9 +8,7 @@ public class MapGenerator : MonoBehaviour
 {
     public Transform tilePrefab;
     public Vector2 mapSize;
-    public float cubeOpeningTime;
     private Transform mapHolder;
-    private Camera camera;
 
     [Range(0,1)]
     public float outlinePercent;
@@ -18,11 +16,9 @@ public class MapGenerator : MonoBehaviour
     private List<Coord> allTileCoords = new List<Coord>();
     [NonSerialized]public Dictionary<GameObject, Vector2> dict = new Dictionary<GameObject, Vector2>();
     
-    public static Action OnEnemyCubePlacement = delegate {  };
  
     private void Awake()
     {
-        camera = Camera.main;
         GenerateMap();
     }
 
@@ -46,30 +42,6 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            RaycastHit hitInfo;
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hitInfo))
-            {
-                hitInfo.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                StartCoroutine(GetNeighbourNegativeX(hitInfo.transform.gameObject));
-                StartCoroutine(GetNeighbourPositiveX(hitInfo.transform.gameObject));
-                StartCoroutine(GetNeighbourNegativeY(hitInfo.transform.gameObject));
-                StartCoroutine(GetNeighbourPositiveY(hitInfo.transform.gameObject));
-                
-                OnEnemyCubePlacement.Invoke();
-
-
-            }
-        }
-        
-    }
-    
     private void MakeParentObjectForClones()
     {
         string holderName = "Generated Map";
@@ -83,87 +55,7 @@ public class MapGenerator : MonoBehaviour
         mapHolder.parent = transform;
     }
 
-    IEnumerator GetNeighbourNegativeX(GameObject go)
-    {
-        yield return new WaitForSeconds(cubeOpeningTime);
-        GameObject id = go.transform.gameObject;
-        Vector2 ss = dict[id];
-        Vector2 neww = new Vector2(ss.x -1, ss.y);
-
-        if (ss.x - 1 >= 0)
-        {
-            var neighbourGO = dict.FirstOrDefault(x => x.Value == neww).Key;
-
-            if (neighbourGO.transform.gameObject.GetComponent<MeshRenderer>().material.color != Color.yellow)
-            {
-                neighbourGO.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-            }
-            StartCoroutine(GetNeighbourNegativeX(neighbourGO));
-            StartCoroutine(GetNeighbourNegativeY(neighbourGO));
-            StartCoroutine(GetNeighbourPositiveY(neighbourGO));
-        }
-
-
-    }
     
-    IEnumerator GetNeighbourPositiveX(GameObject go)
-    {
-        yield return new WaitForSeconds(cubeOpeningTime);
-        GameObject id = go.transform.gameObject;
-        Vector2 ss = dict[id];
-        Vector2 neww = new Vector2(ss.x +1, ss.y);
-
-        if (ss.x + 1 <= 9)
-        {
-            var neighbourGO = dict.FirstOrDefault(x => x.Value == neww).Key;
-            if (neighbourGO.transform.gameObject.GetComponent<MeshRenderer>().material.color != Color.yellow)
-            {
-                neighbourGO.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-            }
-            
-            StartCoroutine(GetNeighbourPositiveX(neighbourGO));
-            StartCoroutine(GetNeighbourNegativeY(neighbourGO));
-            StartCoroutine(GetNeighbourPositiveY(neighbourGO));
-        }
-    }
-    
-    IEnumerator GetNeighbourNegativeY(GameObject go)
-    {
-        yield return new WaitForSeconds(cubeOpeningTime);
-        GameObject id = go.transform.gameObject;
-        Vector2 ss = dict[id];
-        Vector2 neww = new Vector2(ss.x, ss.y-1);
-
-        if (ss.y - 1 >= 0)
-        {
-            var neighbourGO = dict.FirstOrDefault(x => x.Value == neww).Key;
-            if (neighbourGO.transform.gameObject.GetComponent<MeshRenderer>().material.color != Color.yellow)
-            {
-                neighbourGO.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-            }
-            StartCoroutine(GetNeighbourNegativeY(neighbourGO));
-
-        }
-    }
-    
-    IEnumerator GetNeighbourPositiveY(GameObject go)
-    {
-        yield return new WaitForSeconds(cubeOpeningTime);
-        GameObject id = go.transform.gameObject;
-        Vector2 ss = dict[id];
-        Vector2 neww = new Vector2(ss.x, ss.y+1);
-
-        if (ss.y + 1 <= 9)
-        {
-            var neighbourGO = dict.FirstOrDefault(x => x.Value == neww).Key;
-            if (neighbourGO.transform.gameObject.GetComponent<MeshRenderer>().material.color != Color.yellow)
-            {
-                neighbourGO.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-            }
-            StartCoroutine(GetNeighbourPositiveY(neighbourGO));
-
-        }
-    }
     
     Vector3 CoordToPosition(int x, int y)
     {

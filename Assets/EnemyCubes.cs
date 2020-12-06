@@ -13,21 +13,17 @@ public class EnemyCubes : MonoBehaviour
 
     private void OnEnable()
     {
-        MapGenerator.OnEnemyCubePlacement += StartCubePlacement;
+        PlayerCube.OnEnemyCubePlacement += StartCubePlacement;
     }
     private void OnDisable()
     {
-        MapGenerator.OnEnemyCubePlacement -= StartCubePlacement;
+        PlayerCube.OnEnemyCubePlacement -= StartCubePlacement;
     }
 
-
-    private void Awake()
-    {
-        map = FindObjectOfType<MapGenerator>();
-    }
 
     private void Start()
     {
+        map = FindObjectOfType<MapGenerator>();
         CreateEnemy();
     }
 
