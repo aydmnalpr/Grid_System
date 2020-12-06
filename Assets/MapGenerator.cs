@@ -9,6 +9,7 @@ public class MapGenerator : MonoBehaviour
     public Transform tilePrefab;
     public Vector2 mapSize;
     public Transform cubePrefab;
+    public float cubeOpeningTime;
 
     [Range(0,1)]
     public float outlinePercent;
@@ -66,10 +67,11 @@ public class MapGenerator : MonoBehaviour
             if (Physics.Raycast(ray, out hitInfo))
             {
                 hitInfo.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                GetNeighbourNegativeX(hitInfo.transform.gameObject);
-                GetNeighbourPositiveX(hitInfo.transform.gameObject);
-                GetNeighbourNegativeY(hitInfo.transform.gameObject);
-                GetNeighbourPositiveY(hitInfo.transform.gameObject);
+                StartCoroutine(GetNeighbourNegativeX(hitInfo.transform.gameObject));
+                StartCoroutine(GetNeighbourPositiveX(hitInfo.transform.gameObject));
+                StartCoroutine(GetNeighbourNegativeY(hitInfo.transform.gameObject));
+                StartCoroutine(GetNeighbourPositiveY(hitInfo.transform.gameObject));
+
 
             }
         }
@@ -77,8 +79,9 @@ public class MapGenerator : MonoBehaviour
     }
 
     //coroutine kullan
-    void GetNeighbourNegativeX(GameObject go)
+    IEnumerator GetNeighbourNegativeX(GameObject go)
     {
+        yield return new WaitForSeconds(cubeOpeningTime);
         GameObject id = go.transform.gameObject;
         Vector2 ss = dict[id];
         Vector2 neww = new Vector2(ss.x -1, ss.y);
@@ -87,16 +90,18 @@ public class MapGenerator : MonoBehaviour
         {
             var neighbourGO = dict.FirstOrDefault(x => x.Value == neww).Key;
             neighbourGO.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-            GetNeighbourNegativeX(neighbourGO);
-            GetNeighbourPositiveX(neighbourGO);
-            GetNeighbourNegativeY(neighbourGO);
-            GetNeighbourPositiveY(neighbourGO);
+            
+            StartCoroutine(GetNeighbourNegativeX(neighbourGO));
+            StartCoroutine(GetNeighbourNegativeY(neighbourGO));
+            StartCoroutine(GetNeighbourPositiveY(neighbourGO));
         }
-        
+
+
     }
     
-    void GetNeighbourPositiveX(GameObject go)
+    IEnumerator GetNeighbourPositiveX(GameObject go)
     {
+        yield return new WaitForSeconds(cubeOpeningTime);
         GameObject id = go.transform.gameObject;
         Vector2 ss = dict[id];
         Vector2 neww = new Vector2(ss.x +1, ss.y);
@@ -105,29 +110,35 @@ public class MapGenerator : MonoBehaviour
         {
             var neighbourGO = dict.FirstOrDefault(x => x.Value == neww).Key;
             neighbourGO.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-            GetNeighbourPositiveX(neighbourGO);
+            
+            StartCoroutine(GetNeighbourPositiveX(neighbourGO));
+            StartCoroutine(GetNeighbourNegativeY(neighbourGO));
+            StartCoroutine(GetNeighbourPositiveY(neighbourGO));
+
         }
-        
+
+
     }
     
-    void GetNeighbourNegativeY(GameObject go)
+    IEnumerator GetNeighbourNegativeY(GameObject go)
     {
+        yield return new WaitForSeconds(cubeOpeningTime);
         GameObject id = go.transform.gameObject;
         Vector2 ss = dict[id];
         Vector2 neww = new Vector2(ss.x, ss.y-1);
-        Debug.Log(ss.y);
 
         if (ss.y - 1 >= 0)
         {
             var neighbourGO = dict.FirstOrDefault(x => x.Value == neww).Key;
             neighbourGO.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-            GetNeighbourNegativeY(neighbourGO);
+            StartCoroutine(GetNeighbourNegativeY(neighbourGO));
+
         }
-        
     }
     
-    void GetNeighbourPositiveY(GameObject go)
+    IEnumerator GetNeighbourPositiveY(GameObject go)
     {
+        yield return new WaitForSeconds(cubeOpeningTime);
         GameObject id = go.transform.gameObject;
         Vector2 ss = dict[id];
         Vector2 neww = new Vector2(ss.x, ss.y+1);
@@ -136,10 +147,12 @@ public class MapGenerator : MonoBehaviour
         {
             var neighbourGO = dict.FirstOrDefault(x => x.Value == neww).Key;
             neighbourGO.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-            GetNeighbourPositiveY(neighbourGO);
+            StartCoroutine(GetNeighbourPositiveY(neighbourGO));
+
         }
-        
     }
+    
+    
 
     Vector3 CoordToPosition(int x, int y)
     {
